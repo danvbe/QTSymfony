@@ -215,6 +215,9 @@
             "config/routes.yaml"
         ]
     },
+    "symfony/serializer": {
+        "version": "v3.4.27"
+    },
     "symfony/stopwatch": {
         "version": "v3.4.27"
     },
