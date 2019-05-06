@@ -78,6 +78,18 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "friendsofsymfony/rest-bundle": {
+        "version": "2.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.2",
+            "ref": "258300d52be6ad59b32a888d5ddafbf9638540ff"
+        },
+        "files": [
+            "config/packages/fos_rest.yaml"
+        ]
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -215,14 +227,26 @@
             "config/routes.yaml"
         ]
     },
+    "symfony/security-core": {
+        "version": "v3.4.27"
+    },
     "symfony/serializer": {
         "version": "v3.4.27"
     },
     "symfony/stopwatch": {
         "version": "v3.4.27"
     },
+    "symfony/templating": {
+        "version": "v3.4.27"
+    },
     "symfony/yaml": {
         "version": "v3.4.27"
+    },
+    "willdurand/jsonp-callback-validator": {
+        "version": "v1.1.0"
+    },
+    "willdurand/negotiation": {
+        "version": "v2.3.1"
     },
     "zendframework/zend-code": {
         "version": "3.3.1"
