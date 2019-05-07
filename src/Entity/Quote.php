@@ -26,29 +26,29 @@ class Quote
      */
     private $author;
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getText(): ?string
+    public function getText()
     {
         return $this->text;
     }
 
-    public function setText(string $text): self
+    public function setText(string $text)
     {
         $this->text = $text;
 
         return $this;
     }
 
-    public function getAuthor(): ?string
+    public function getAuthor()
     {
         return $this->author;
     }
 
-    public function setAuthor(string $author): self
+    public function setAuthor(string $author)
     {
         $this->author = $author;
 
