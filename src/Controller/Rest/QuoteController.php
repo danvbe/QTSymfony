@@ -19,16 +19,17 @@ class QuoteController extends AbstractFOSRestController {
 
 	/**
 	 * Creates a Quote resource
-	 * @REST\Post("/quote")
+	 * @REST\Post("/quote/{appId}")
 	 * @param Request $request
 	 * @return View
 	 */
-	public function newQuote(Request $request)
+	public function newQuote(Request $request, string $appId)
 	{
 		$em = $this->getDoctrine()->getManager();
 		$quote = new Quote();
 		$quote->setText($request->get('text'));
 		$quote->setAuthor($request->get('author'));
+		$quote->setAppId($appId);
 		$em->persist($quote);
 		$em->flush();
 
@@ -38,13 +39,13 @@ class QuoteController extends AbstractFOSRestController {
 
 	/**
 	 * Removes the Quote resource
-	 * @REST\Delete("/quote/{quoteId}")
+	 * @REST\Delete("/quote/{appId}/{quoteId}")
 	 */
-	public function deleteQuote($quoteId)
+	public function deleteQuote($quoteId, string $appId)
 	{
 		$em = $this->getDoctrine()->getManager();
-		$quote = $em->getRepository('App:Quote')->find($quoteId);
-		if ($quote) {
+		$quote = $em->getRepository('App:Quote')->findOneBy(array('id'=>$quoteId,'app_id'=>$appId));
+		if ( $quote ) {
 			$em->remove($quote);
 			$em->flush();
 		}
@@ -55,24 +56,25 @@ class QuoteController extends AbstractFOSRestController {
 
 	/**
 	 * Retrieves a Quote resource
-	 * @REST\Get("/quote/{quoteId}")
+	 * @REST\Get("/quote/{appId}/{quoteId}")
 	 */
-	public function getQuote($quoteId)
+	public function getQuote($quoteId, string $appId)
 	{
 		$em = $this->getDoctrine()->getManager();
-		$quote = $em->getRepository('App:Quote')->find($quoteId);
+		$quote = $em->getRepository('App:Quote')->findOneBy(array('id'=>$quoteId,'app_id'=>$appId));
+
 		// In case our GET was a success we need to return a 200 HTTP OK response with the request object
 		return View::create($quote, Response::HTTP_OK);
 	}
 
 	/**
 	 * Retrieves a random Quote resource
-	 * @REST\Get("/randomquote/")
+	 * @REST\Get("/randomquote/{appId}/")
 	 */
-	public function getRandomQuote()
+	public function getRandomQuote(string $appId)
 	{
 		$em = $this->getDoctrine()->getManager();
-		$quotes = $em->getRepository('App:Quote')->findAll();
+		$quotes = $em->getRepository('App:Quote')->findBy(array('app_id'=>$appId));
 		//todo - move this to SQL for faster results
 		$i = rand(0,count($quotes)-1);
 
@@ -82,24 +84,24 @@ class QuoteController extends AbstractFOSRestController {
 
 	/**
 	 * Retrieves a collection of Quote resource
-	 * @REST\Get("/quote")
+	 * @REST\Get("/quote/{appId}/")
 	 */
-	public function getQuotes()
+	public function getQuotes(string $appId)
 	{
 		$em = $this->getDoctrine()->getManager();
-		$quotes = $em->getRepository('App:Quote')->findAll();
+		$quotes = $em->getRepository('App:Quote')->findBy(array('app_id'=>$appId));
 		// In case our GET was a success we need to return a 200 HTTP OK response with the collection of quote object
 		return View::create($quotes, Response::HTTP_OK);
 	}
 
 	/**
 	 * Replaces Quote resource
-	 * @REST\Put("/quote/{quoteId}")
+	 * @REST\Put("/quote/{appId}/{quoteId}")
 	 */
-	public function putQuote(int $quoteId, Request $request)
+	public function putQuote(string $appId, $quoteId, Request $request)
 	{
 		$em = $this->getDoctrine()->getManager();
-		$quote = $em->getRepository('App:Quote')->find($quoteId);
+		$quote = $em->getRepository('App:Quote')->findOneBy(array('id'=>$quoteId,'app_id'=>$appId));
 		if ($quote) {
 			$quote->setText($request->get('text'));
 			$quote->setAuthor($request->get('author'));

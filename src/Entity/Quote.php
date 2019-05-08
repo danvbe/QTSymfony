@@ -16,6 +16,11 @@ class Quote
      */
     private $id;
 
+	/**
+	 * @ORM\Column(type="text")
+	 */
+	private $app_id;
+
     /**
      * @ORM\Column(type="text")
      */
@@ -30,6 +35,20 @@ class Quote
     {
         return $this->id;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getAppId() {
+		return $this->app_id;
+	}
+
+	/**
+	 * @param mixed $app_id
+	 */
+	public function setAppId( $app_id ) {
+		$this->app_id = $app_id;
+	}
 
     public function getText()
     {
