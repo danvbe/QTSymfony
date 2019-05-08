@@ -19,7 +19,7 @@ class QuoteController extends AbstractFOSRestController {
 
 	/**
 	 * Creates a Quote resource
-	 * @REST\Post("/quote/new")
+	 * @REST\Post("/quote")
 	 * @param Request $request
 	 * @return View
 	 */
@@ -38,11 +38,10 @@ class QuoteController extends AbstractFOSRestController {
 
 	/**
 	 * Removes the Quote resource
-	 * @REST\Post("/quote/delete")
+	 * @REST\Delete("/quote/{quoteId}")
 	 */
-	public function deleteQuote(Request $request)
+	public function deleteQuote($quoteId)
 	{
-		$quoteId = $request->get('id');
 		$em = $this->getDoctrine()->getManager();
 		$quote = $em->getRepository('App:Quote')->find($quoteId);
 		if ($quote) {
@@ -95,7 +94,7 @@ class QuoteController extends AbstractFOSRestController {
 
 	/**
 	 * Replaces Quote resource
-	 * @REST\Post("/quote/{quoteId}")
+	 * @REST\Put("/quote/{quoteId}")
 	 */
 	public function putQuote(int $quoteId, Request $request)
 	{
