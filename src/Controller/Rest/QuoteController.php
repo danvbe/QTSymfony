@@ -18,6 +18,25 @@ use Symfony\Component\HttpFoundation\Response;
 class QuoteController extends AbstractFOSRestController {
 
 	/**
+	 * Retrieves a random Quote resource
+	 * @REST\Get("/quote/random/{appId}")
+	 */
+	public function getRandomQuote(string $appId)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$quotes = $em->getRepository('App:Quote')->findBy(array('app_id'=>$appId));
+		$ret = null;
+		//todo - move this to SQL for faster results
+		if(count($quotes) > 0) {
+			$i = rand( 0, count( $quotes ) - 1 );
+			$ret = $quotes[$i];
+		}
+
+		// In case our GET was a success we need to return a 200 HTTP OK response with the collection of quote object
+		return View::create($ret, Response::HTTP_OK);
+	}
+
+	/**
 	 * Retrieves list of authors
 	 * @REST\Get("/quote/{appId}/authors")
 	 */
@@ -29,7 +48,6 @@ class QuoteController extends AbstractFOSRestController {
 		// In case our GET was a success we need to return a 200 HTTP OK response with the collection of quote object
 		return View::create($authors, Response::HTTP_OK);
 	}
-
 
 	/**
 	 * Creates a Quote resource
@@ -79,21 +97,6 @@ class QuoteController extends AbstractFOSRestController {
 
 		// In case our GET was a success we need to return a 200 HTTP OK response with the request object
 		return View::create($quote, Response::HTTP_OK);
-	}
-
-	/**
-	 * Retrieves a random Quote resource
-	 * @REST\Get("/randomquote/{appId}/")
-	 */
-	public function getRandomQuote(string $appId)
-	{
-		$em = $this->getDoctrine()->getManager();
-		$quotes = $em->getRepository('App:Quote')->findBy(array('app_id'=>$appId));
-		//todo - move this to SQL for faster results
-		$i = rand(0,count($quotes)-1);
-
-		// In case our GET was a success we need to return a 200 HTTP OK response with the collection of quote object
-		return View::create($quotes[$i], Response::HTTP_OK);
 	}
 
 	/**

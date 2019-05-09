@@ -1,0 +1,6 @@
+{
+  "id": "@integer@",
+  "appId": "@string@",
+  "text": "@string@",
+  "author": "@string@"
+}
