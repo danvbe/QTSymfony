@@ -114,6 +114,9 @@
     "psr/simple-cache": {
         "version": "1.0.1"
     },
+    "symfony/browser-kit": {
+        "version": "v3.4.27"
+    },
     "symfony/cache": {
         "version": "v3.4.27"
     },
@@ -136,6 +139,9 @@
             "config/bootstrap.php"
         ]
     },
+    "symfony/css-selector": {
+        "version": "v3.4.27"
+    },
     "symfony/debug": {
         "version": "v3.4.27"
     },
@@ -143,6 +149,9 @@
         "version": "v3.4.27"
     },
     "symfony/doctrine-bridge": {
+        "version": "v3.4.27"
+    },
+    "symfony/dom-crawler": {
         "version": "v3.4.27"
     },
     "symfony/dotenv": {
@@ -208,6 +217,23 @@
     },
     "symfony/orm-pack": {
         "version": "v1.0.6"
+    },
+    "symfony/phpunit-bridge": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "43a398157bbd3379d98c34006c7b10a57bce9ef9"
+        },
+        "files": [
+            ".env.test",
+            "bin/phpunit",
+            "config/bootstrap.php",
+            "config/services_test.yaml",
+            "phpunit.xml.dist",
+            "tests/.gitignore"
+        ]
     },
     "symfony/polyfill-apcu": {
         "version": "v1.11.0"
