@@ -83,6 +83,19 @@ class QuoteController extends AbstractFOSRestController {
 	}
 
 	/**
+	 * Retrieves a random Quote resource
+	 * @REST\Get("/quote/{appId}/author/{author}")
+	 */
+	public function getAuthorQuotes(string $appId, string $author)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$quotes = $em->getRepository('App:Quote')->findBy(array('app_id'=>$appId,'author'=>urldecode($author)));
+
+		// In case our GET was a success we need to return a 200 HTTP OK response with the collection of quote object
+		return View::create($quotes, Response::HTTP_OK);
+	}
+
+	/**
 	 * Retrieves a collection of Quote resource
 	 * @REST\Get("/quote/{appId}/")
 	 */
