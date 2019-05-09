@@ -18,6 +18,20 @@ use Symfony\Component\HttpFoundation\Response;
 class QuoteController extends AbstractFOSRestController {
 
 	/**
+	 * Retrieves list of authors
+	 * @REST\Get("/quote/{appId}/authors")
+	 */
+	public function getAuthors(string $appId)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$authors = $em->getRepository('App:Quote')->findAuthors();
+
+		// In case our GET was a success we need to return a 200 HTTP OK response with the collection of quote object
+		return View::create($authors, Response::HTTP_OK);
+	}
+
+
+	/**
 	 * Creates a Quote resource
 	 * @REST\Post("/quote/{appId}")
 	 * @param Request $request
@@ -83,7 +97,7 @@ class QuoteController extends AbstractFOSRestController {
 	}
 
 	/**
-	 * Retrieves a random Quote resource
+	 * Retrieves Quotes for a given author
 	 * @REST\Get("/quote/{appId}/author/{author}")
 	 */
 	public function getAuthorQuotes(string $appId, string $author)
