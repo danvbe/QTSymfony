@@ -20,7 +20,7 @@ class QuoteValidator {
 		if ( null === $quote ) {
 			//we need to return a 404 - NOT FOUND response
 			return array(
-				'error' => 'Quote not found',
+				'errors' => array('Quote not found'),
 				'http_code'  => Response::HTTP_NOT_FOUND,
 			);
 		}
