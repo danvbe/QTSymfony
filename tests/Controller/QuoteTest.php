@@ -125,5 +125,88 @@ class QuoteTest extends WebTestCase {
 		$this->assertTrue($client->getResponse()->isSuccessful());
 		//we get 204 code - HTTP NO CONTENT
 		$this->assertEquals(204, $client->getResponse()->getStatusCode());
+
+		//lets try to DELETE it again
+		$url = "/api/quote/$app_id/$id";
+		$client->request(
+			'DELETE',
+			$url,
+			[],
+			[],
+			[
+				'CONTENT_TYPE' => 'application/json',
+			]
+		);
+
+		//we get 404 code - HTTP NOT FOUND
+		$this->assertEquals(404, $client->getResponse()->getStatusCode());
+	}
+
+	public function testInvalidRequests(){
+		$client = self::createClient();
+		$app_id = static::APP_ID;
+		$url = "/api/quote/$app_id";
+
+		//lets post invalid data - author name
+		$data = array(
+			'author' => '',
+			'text' => 'This is a dummy quote',
+			'appId' => $app_id,
+		);
+
+		$client->request(
+			'POST',
+			$url,
+			$data,
+			[],
+			[
+				'CONTENT_TYPE' => 'application/json',
+			]
+		);
+		//we get 422 code - HTTP_UNPROCESSABLE_ENTITY
+		$this->assertEquals(422, $client->getResponse()->getStatusCode());
+
+
+		//let's add a correct one and then update with invalid data
+		$data = array(
+			'author' => 'Author',
+			'text' => 'This is a dummy quote',
+			'appId' => $app_id,
+		);
+
+		$client->request(
+			'POST',
+			$url,
+			$data,
+			[],
+			[
+				'CONTENT_TYPE' => 'application/json',
+			]
+		);
+		//we have it working
+		$this->assertTrue($client->getResponse()->isSuccessful());
+		//we get 200 code - HTTP OK
+		$this->assertEquals(201, $client->getResponse()->getStatusCode());
+		$response_data = json_decode($client->getResponse()->getContent(),true);
+		$id = $response_data['id'];
+
+		//LET's UPDATE the entity - with invalid data - no author
+		$data = array(
+			'author' => '',
+			'text' => 'This is a dummy quote - updated',
+			'appId' => $app_id,
+		);
+		$url = "/api/quote/$app_id/$id";
+		$client->request(
+			'PUT',
+			$url,
+			$data,
+			[],
+			[
+				'CONTENT_TYPE' => 'application/json',
+			]
+		);
+		//we get 422 code - HTTP_UNPROCESSABLE_ENTITY
+		$this->assertEquals(422, $client->getResponse()->getStatusCode());
 	}
 }
