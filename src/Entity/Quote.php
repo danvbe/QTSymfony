@@ -17,7 +17,7 @@ class Quote
     private $id;
 
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="string", length=10)
 	 */
 	private $app_id;
 

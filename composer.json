@@ -5,6 +5,7 @@
         "php": "^7.0.8",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "doctrine/annotations": "^1.6",
         "friendsofsymfony/rest-bundle": "^2.5",
         "symfony/apache-pack": "^1.0",
         "symfony/console": "3.4.*",
@@ -14,6 +15,7 @@
         "symfony/orm-pack": "^1.0",
         "symfony/property-access": "3.4.*",
         "symfony/serializer": "3.4.*",
+        "symfony/validator": "3.4.*",
         "symfony/yaml": "3.4.*"
     },
     "config": {

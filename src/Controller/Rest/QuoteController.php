@@ -9,11 +9,14 @@
 namespace App\Controller\Rest;
 
 use App\Entity\Quote;
+use App\Validator\Contraints\QuoteValidator;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class QuoteController extends AbstractFOSRestController {
 
@@ -55,32 +58,40 @@ class QuoteController extends AbstractFOSRestController {
 	 * @param Request $request
 	 * @return View
 	 */
-	public function newQuote(Request $request, string $appId)
+	public function newQuote(Request $request, string $appId, QuoteValidator $validator)
 	{
 		$em = $this->getDoctrine()->getManager();
 		$quote = new Quote();
 		$quote->setText($request->get('text'));
 		$quote->setAuthor($request->get('author'));
 		$quote->setAppId($appId);
+
+		if($return = $validator->validateQuote($quote)){
+			return View::create($return, $return['http_code']);
+		}
+
 		$em->persist($quote);
 		$em->flush();
-
 		// In case our POST was a success we need to return a 201 HTTP CREATED response
 		return View::create($quote, Response::HTTP_CREATED);
+
 	}
 
 	/**
 	 * Removes the Quote resource
 	 * @REST\Delete("/quote/{appId}/{quoteId}")
 	 */
-	public function deleteQuote($quoteId, string $appId)
+	public function deleteQuote($quoteId, string $appId, QuoteValidator $validator)
 	{
 		$em = $this->getDoctrine()->getManager();
 		$quote = $em->getRepository('App:Quote')->findOneBy(array('id'=>$quoteId,'app_id'=>$appId));
-		if ( $quote ) {
-			$em->remove($quote);
-			$em->flush();
+
+		if($return = $validator->validateQuote($quote)){
+			return View::create($return, $return['http_code']);
 		}
+
+		$em->remove($quote);
+		$em->flush();
 
 		// In case our DELETE was a success we need to return a 204 HTTP NO CONTENT response. The object is deleted.
 		return View::create([], Response::HTTP_NO_CONTENT);
@@ -128,18 +139,22 @@ class QuoteController extends AbstractFOSRestController {
 	 * Replaces Quote resource
 	 * @REST\Put("/quote/{appId}/{quoteId}")
 	 */
-	public function putQuote(string $appId, $quoteId, Request $request)
+	public function putQuote(string $appId, $quoteId, Request $request, QuoteValidator $validator)
 	{
 		$em = $this->getDoctrine()->getManager();
 		$quote = $em->getRepository('App:Quote')->findOneBy(array('id'=>$quoteId,'app_id'=>$appId));
 		if ($quote) {
 			$quote->setText($request->get('text'));
 			$quote->setAuthor($request->get('author'));
+
+			if($return = $validator->validateQuote($quote)){
+				return View::create($return, $return['http_code']);
+			}
+
 			$em->persist($quote);
 			$em->flush();
 		}
 		// In case our PUT was a success we need to return a 200 HTTP OK response with the object as a result of PUT
 		return View::create($quote, Response::HTTP_OK);
 	}
-
 }
